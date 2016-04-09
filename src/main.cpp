@@ -1540,6 +1540,8 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
 
         if (IsCoinStake())
         {
+            if (fDebug && GetBoolArg("-printcoinstake"))
+                printf("ConnectInputs() : processing coin stake\n");
             // ppcoin: coin stake tx earns reward instead of paying fee
             uint64 nCoinAge;
             if (!GetCoinAge(txdb, nCoinAge))
@@ -1547,6 +1549,8 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
 
             // If vout[0] is not empty check if this is a reactor stake.
             if (!vout[0].IsEmpty()) {
+                if (fDebug && GetBoolArg("-printcoinstake"))
+                    printf("ConnectInputs() : processing reactor stake\n");
                 // OP_REACTOR is stored in vout[0] destination is stored in vout[1]
                 return IsReactorStake(GetReactorDBFile(), vout[0].scriptPubKey, vout[1].scriptPubKey, nTime, nValueIn, GetValueOut(), nCoinAge, pindexBlock->nBits, pindexBlock->nHeight);
             } else {

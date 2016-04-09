@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int CURRENT_REACTOR_VERSION = -2; // Test version
+int CURRENT_REACTOR_VERSION = -1; // Test version
 
 bool maybeWipeReactorDB(string strFileName) {
     int dbversion;
@@ -39,7 +39,7 @@ void InitReactors() {
 
         if (!inflatedb) {
             // TODO Replace with correct first and last reactor addresses.
-            if (!fTestNet && (!CReactorDB(reactordbfile).CheckReactorAddr(string("dMajkjpXzy2KTk21JkFx8aDtUVoaXmeMEZ"))
+            if (!fTestNet && (!CReactorDB(reactordbfile).CheckReactorAddr(string("dMd36o2f1xpRqjbhtJzzMQKFCnrPmkY35W"))
                 || !CReactorDB(reactordbfile).CheckReactorAddr(string("dK8Sh1R81YxaFrwwMmYEH1QET6ejhUw3pQ"))))
                 inflatedb = true;
             else if (fTestNet && (!CReactorDB(reactordbfile).CheckReactorAddr(string("muLhTBAfaS2ro2fhDFh6D7MArg6qGv1j1i"))
@@ -85,9 +85,13 @@ bool CTransaction::IsReactorStake(string strFileName, CScript scriptPubKeyType, 
         if (nStakeReward > GetProofOfStakeReward(nCoinAge, nBits, nTime, nHeight, GetReactorRate(reactorStakeValue, nValueIn)) - GetMinFee() + MIN_TX_FEE)
             return DoS(100, error("IsReactorStake() : %s stake reward exceeded", GetHash().ToString().substr(0, 10).c_str()));
 
+        if (fDebug && GetBoolArg("-printcoinstake"))
+            printf("IsReactorStake() : reactor stake processed successfully\n");
         return true;
     }
 
+    if (fDebug && GetBoolArg("-printcoinstake"))
+        printf("IsReactorStake() : stake is not from a reactor\n");
     return false;
 }
 
