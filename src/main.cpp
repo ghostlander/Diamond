@@ -3279,7 +3279,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
         /* Disconnect all obsolete clients after 10 May 2016 12:00:00 UTC */
         uint nAdjTime = GetAdjustedTime();
-        if(nAdjTime > 1462881600) {
+        if(nAdjTime > 1463313600) {
             if(pfrom->nVersion < MIN_PROTOCOL_VERSION) {
                 printf("obsolete node %s with client %d, disconnecting\n",
                   pfrom->addr.ToString().c_str(), pfrom->nVersion);
